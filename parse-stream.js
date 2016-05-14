@@ -6,7 +6,6 @@
 const debug = require('debug')('hello');
 
 const fs = require('fs');
-const parse = require('csv-parse');
 const helper = require('./helper');
 const readline = require('readline');
 
