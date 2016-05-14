@@ -31,9 +31,9 @@ exports.logToS3 = function (data, callback) {
     setTimeout(() => {
         debug(`putting data to S3: ${JSON.stringify(data)}`);
         s3.putObject({
-            // using Date() as unique id causes collisions
-            // Key: `row/line-${new Date().valueOf()}-${data.fullName}.json`,
-            Key: `row/line-${new Date().valueOf()}.json`,
+            // using Date() as unique id would cause collisions
+            // Key: `row/line-${new Date().valueOf()}.json`,
+            Key: `row/line-${new Date().valueOf()}-${data.fullName}.json`,
             Body: JSON.stringify(data),
         }, (err) => {
             callback(err ? err : surprise('log-to-s3'), { data, logged: true });

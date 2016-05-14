@@ -8,13 +8,20 @@ const helper = require('./helper');
 
 // 0. Naïve
 
+/*Junhao's comments towards naive() function
+
+The naive method is rather straight forward. My only qualms are:
+    1) Unnecessary function names (E.g thenParse, afterSending, afterLogging)
+    2) logToS3 can be shifted into the "if" block when there is an error
+    3) In line 57, index does not need to be incremented
+*/
+
 function naive() {
     fs.readFile(__dirname + '/sample.csv', function thenParse(err, loadedCsv) {
 
         parse(loadedCsv, function transformEachLine(err, parsed) {
 
             for (let index in parsed) {
-
                 let line = parsed[index];
 
                 // FIXME: Put your transformation here

@@ -50,8 +50,6 @@ function helloPromise() {
                         });
                     });
                 }
-
-                index++;
             }
         });
     });

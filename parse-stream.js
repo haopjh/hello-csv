@@ -17,8 +17,14 @@ function helloStream() {
     });
 
     rl.on('line', (line) => {
-        let lineList = line.split(',');
+        // Parse the line
+        let lineString = '[' + line + ']';
+        let lineList = JSON.parse(lineString);
+
+        // Retrieve full name
         let fullName = lineList[0] + ' ' + lineList[1];
+
+        // The usual
         helper.sendSms(fullName, function afterSending(err, sendingStatus) {
             if (err) {
                 debug(err.message);
