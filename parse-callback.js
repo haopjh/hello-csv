@@ -18,18 +18,19 @@ function naive() {
                 let line = parsed[index];
 
                 // FIXME: Put your transformation here
+                let fullName = line[0] + ' ' + line[1];
 
                 if (index > 0) {
                     debug(`sending data index: ${index - 1}`);
+                    helper.sendSms(fullName, function afterSending(err, sendingStatus) {
 
-                    helper.sendSms(line, function afterSending(err, sendingStatus) {
                         let lineToLog;
                         if (err) {
                             debug(err.message);
 
                             lineToLog = {
                                 sendingStatus,
-                                line,
+                                fullName,
                             };
                         }
 
