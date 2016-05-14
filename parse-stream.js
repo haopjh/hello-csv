@@ -6,6 +6,7 @@
 const debug = require('debug')('hello');
 
 const fs = require('fs');
+const parse = require('csv-parse');
 const helper = require('./helper');
 const readline = require('readline');
 
@@ -16,29 +17,35 @@ function helloStream() {
     });
 
     rl.on('line', (line) => {
-        // Parse the line
-        let lineString = '[' + line + ']';
-        let lineList = JSON.parse(lineString);
 
-        // Retrieve full name
-        let fullName = lineList[0] + ' ' + lineList[1];
+        // Parse each individual line
+        parse(line, (err, parsed) => {
 
-        // The usual
-        helper.sendSms(fullName, function afterSending(err, sendingStatus) {
-            if (err) {
-                debug(err.message);
+            // Parsed data is always in a list
+            if (parsed.length === 1) {
+                let lineList = parsed[0];
 
-                let lineToLog = {
-                    sendingStatus,
-                    fullName,
-                };
+                // Retrieve full name
+                let fullName = lineList[0] + ' ' + lineList[1];
 
-                helper.logToS3(lineToLog, function afterLogging(err, loggingStatus) {
+                // The usuals
+                helper.sendSms(fullName, (err, sendingStatus) => {
                     if (err) {
                         debug(err.message);
+
+                        let lineToLog = {
+                            sendingStatus,
+                            fullName,
+                        };
+
+                        helper.logToS3(lineToLog, (err, loggingStatus) => {
+                            if (err) {
+                                debug(err.message);
+                            }
+                        });
+
                     }
                 });
-
             }
         });
     });

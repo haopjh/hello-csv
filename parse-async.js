@@ -9,9 +9,9 @@ const helper = require('./helper');
 const async = require('async');
 
 function helloAsync() {
-    fs.readFile(__dirname + '/sample.csv', function thenParse(err, loadedCsv) {
+    fs.readFile(__dirname + '/sample.csv', (err, loadedCsv) => {
 
-        parse(loadedCsv, function transformEachLine(err, parsed) {
+        parse(loadedCsv, (err, parsed) => {
 
             for (let index in parsed) {
 
@@ -25,7 +25,7 @@ function helloAsync() {
 
                     async.waterfall([
                         (callback) => {
-                            helper.sendSms(fullName, function afterSending(err, sendingStatus) {
+                            helper.sendSms(fullName, (err, sendingStatus) => {
                                 let lineToLog;
                                 if (err) {
                                     debug(err.message);
@@ -40,7 +40,7 @@ function helloAsync() {
                         },
 
                         (lineToLog, callback) => {
-                            helper.logToS3(lineToLog, function afterLogging(err, loggingStatus) {
+                            helper.logToS3(lineToLog, (err, loggingStatus) => {
                                 if (err) {
                                     debug(err.message);
                                 } else {
